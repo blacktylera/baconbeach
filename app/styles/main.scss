@@ -1,7 +1,9 @@
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
 
 h1 {
-	font-size: 5em;
-	font-family: 'Amatic SC';
 	text-align: center;
+}
+
+.col-md-2 {
+	background-color: red;
 }
