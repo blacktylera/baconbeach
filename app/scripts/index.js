@@ -1,6 +1,6 @@
-var game = new Phaser.Game(800, 674, Phaser.AUTO, 'gameDiv', { preload: preload, create: create, update: update });
-var bacon;
+var game = new Phaser.Game(681, 574, Phaser.AUTO, 'gameDiv', { preload: preload, create: create, update: update });
 var background;
+var character;
 function preload() {
 
     game.stage.backgroundColor = '#71c5cf';
@@ -14,6 +14,14 @@ function preload() {
 }
 
 var platforms;
+var player;
+var platforms;
+var cursors;
+
+var bacon;
+var broccoli;
+var score = 0;
+var scoreText;
 
 function create() {
 	console.log('hello');
@@ -23,7 +31,13 @@ function create() {
 
     //  Game Background
     background = game.add.sprite(0, 0, 'background');
+    // Game Bacon
     bacon = game.add.sprite(0, 0, 'bacon');
+    //Game Broccoli
+    broccoli = game.add.sprite(250,25, 'broccoli');
+    //Game character
+    character = game.add.sprite(290,465, 'character');
+
 
  }
 
