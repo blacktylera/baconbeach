@@ -37,13 +37,24 @@ function create() {
 
     character = game.add.sprite(290,465, 'character');
 
-    //  enable physics on the character
+    //  enable physics on objects
     game.physics.arcade.enable(character);
+    game.physics.arcade.enable(bacon);
+    game.physics.arcade.enable(broccoli);
 
     //  jump?
     character.body.bounce.y = 0.2;
     character.body.gravity.y = 300;
     character.body.collideWorldBounds = true;
+
+    // Bacon Fall
+
+    bacon.body.gravity.y = 150;
+    bacon.body.collideWorldBounds = false;
+
+    // Broccoli Fall
+    broccoli.body.gravity.y = 150;
+    broccoli.body.collideWorldBounds = false;
 
     //  walking
     character.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -64,20 +75,22 @@ function create() {
 
 function update() {
 
+    game.physics.arcade.overlap(character, bacon, baconHit, null, this);
+    game.physics.arcade.overlap(character, broccoli, broccoliHit, null, this);
 
     character.body.velocity.x = 0;
 
     if (cursors.left.isDown)
     {
-        
-        character.body.velocity.x = -150;
+
+        character.body.velocity.x = -350;
 
         character.animations.play('left');
     }
     else if (cursors.right.isDown)
     {
-        
-        character.body.velocity.x = 150;
+
+        character.body.velocity.x = 350;
 
         character.animations.play('right');
     }
@@ -88,11 +101,30 @@ function update() {
 
         character.frame = 1;
     }
-    
     //  Jumping
     if (cursors.up.isDown && character.body.velocity.y)
     {
         character.body.velocity.y = -100;
     }
+
+}
+
+function baconHit (player, bacon) {
+
+
+    bacon.kill();
+
+
+    score += 100;
+    scoreText.text = 'Score: ' + score;
+
+}
+
+function broccoliHit (player, broccoli) {
+
+    broccoli.kill();
+
+    score -= 100;
+    scoreText.text = 'Score: ' + score;
 
 }
