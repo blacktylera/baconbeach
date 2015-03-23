@@ -13,6 +13,7 @@ var beachTheme;
     game.load.image('menu', 'scripts/baconbeachmenu.png');
     game.load.audio('beachtheme', 'scripts/beachtheme.m4a');
     game.load.audio('gulpsound', 'scripts/gulpsound.m4a');
+    game.load.audio('awman', 'scripts/awmanvegetables.m4a');
   }
 
   function create(){
@@ -24,7 +25,7 @@ var beachTheme;
     character = game.add.sprite(290,-10, 'character');
     game.physics.arcade.enable(character);
     character.body.bounce.y = 0.5;
-    character.body.gravity.y = 500;
+    character.body.gravity.y = 400;
     character.body.collideWorldBounds = true;
 
 

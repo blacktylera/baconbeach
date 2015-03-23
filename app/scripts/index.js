@@ -117,8 +117,12 @@ function baconHit (player, bacon) {
 }
 
 function broccoliHit (player, broccoli) {
-    var health = 1;
     broccoli.kill();
+    awMan = game.add.audio('awman');
+    awMan.volume = 0.5;
+    awMan.loop = false;
+    awMan.play('');
+    var health = 3;
     health -= 1;
     if (health <=0 )
     {
