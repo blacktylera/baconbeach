@@ -105,6 +105,10 @@ function baconHit (player, bacon) {
 
 
     bacon.kill();
+    gulpSound = game.add.audio('gulpsound');
+    gulpSound.volume = 0.5;
+    gulpSound.loop = false;
+    gulpSound.play('');
 
 
     score += 100;
