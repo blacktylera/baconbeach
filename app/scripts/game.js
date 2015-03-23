@@ -1,0 +1,1 @@
+var game = new Phaser.Game(681, 574, Phaser.AUTO, 'gameDiv');
