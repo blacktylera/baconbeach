@@ -1,15 +1,5 @@
-var game = new Phaser.Game(681, 574, Phaser.AUTO, 'gameDiv', { preload: preload, create: create, update: update });
-
-function preload() {
-
-    game.load.image('bacon', 'scripts/bacon.png');
-    game.load.image('broccoli', 'scripts/broccoli.png');
-    game.load.image('background', 'scripts/backgroundstatic.png');
-    game.load.image('character', 'scripts/pixelavatar96.png', 32, 48);
-
-
-
-}
+(function(){
+game.state.add('playgame', {create:create, update: update});
 
 var background;
 var character;
@@ -19,6 +9,8 @@ var bacon;
 var broccoli;
 var score = 0;
 var scoreText;
+
+
 
 function create() {
 	console.log('hello');
@@ -121,10 +113,14 @@ function baconHit (player, bacon) {
 }
 
 function broccoliHit (player, broccoli) {
-
+    var health = 1;
     broccoli.kill();
-
-    score -= 100;
-    scoreText.text = 'Score: ' + score;
-
+    health -= 1;
+    if (health <=0 )
+    {
+    alert('Death by Fiber. Gnarley, brah.');
+    }
 }
+
+
+})();
