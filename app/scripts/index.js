@@ -29,6 +29,18 @@ function create() {
 
     character = game.add.sprite(290,465 , 'character');
 
+    baconGroup = game.add.group();
+    baconGroup.enableBody = true;
+    baconGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    baconGroup.createMultiple(100, 'bacon');
+    baconGroup.setAll('collideWorldBounds', false);
+
+    broccoliGroup = game.add.group();
+    broccoliGroup.enableBody = true;
+    broccolliGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    broccoliGroup.createMultiple(100, 'broccoli');
+    broccoliGroup.setAll('collideWorldBounds', false);
+
     //  enable physics on objects
     game.physics.arcade.enable(character);
     game.physics.arcade.enable(bacon);
@@ -96,6 +108,8 @@ function update() {
 
         character.frame = 1;
     }
+    
+
     //  Upward and downward movement
     character.body.velocity.y = 0;
     // character.body.height.y = 0;
@@ -144,7 +158,7 @@ function broccoliHit (player, broccoli) {
     awMan.volume = 0.5;
     awMan.loop = false;
     awMan.play('');
-    var health = 3;
+    var health = 1;
     health -= 1;
     if (health <=0 )
     {
