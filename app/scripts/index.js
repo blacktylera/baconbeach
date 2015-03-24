@@ -27,7 +27,7 @@ function create() {
 
     //want ground to be right around 0,465?
 
-    character = game.add.sprite(290,465, 'character');
+    character = game.add.sprite(290,465 , 'character');
 
     //  enable physics on objects
     game.physics.arcade.enable(character);
@@ -67,6 +67,8 @@ function update() {
 
     game.physics.arcade.overlap(character, bacon, baconHit, null, this);
     game.physics.arcade.overlap(character, broccoli, broccoliHit, null, this);
+    background.y = 0;
+    background.x = 0;
 
 
     // Left and right movement
@@ -96,8 +98,9 @@ function update() {
     }
     //  Upward and downward movement
     character.body.velocity.y = 0;
+    // character.body.height.y = 0;
 
-    if (cursors.up.isDown)
+    if (cursors.up.isDown && character.y >= 388)
     {
 
         character.body.velocity.y = -350;
