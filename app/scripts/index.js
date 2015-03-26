@@ -51,6 +51,7 @@ function create() {
 
     //  enable physics on objects
     game.physics.arcade.enable(character);
+    character.body.setSize(25, 25, 25, 25);
     game.physics.arcade.enable(bacon);
     game.physics.arcade.enable(broccoli);
     character.body.collideWorldBounds = true;
@@ -73,8 +74,8 @@ function create() {
     character.animations.add('down', [15, 16, 17, 18], 10, true);
 
     //  The score
-    scoreText = game.add.text(450, 16, 'Bacon Bits: 0', { fontSize: '32px', fill: '#000' });
-    livesText = game.add.text (450, 45,'Lives:' + health, { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(450, 16, 'Bacon Bits: 0', { fontSize: '32px', fill: '#FF33CC' });
+    livesText = game.add.text (450, 45,'Lives:' + health, { fontSize: '32px', fill: '#FF33CC' });
 
     //  controls
     cursors = game.input.keyboard.createCursorKeys();
