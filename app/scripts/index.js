@@ -4,12 +4,17 @@ game.state.add('playgame', {create:create, update: update});
 var background;
 var character;
 var cursors;
-
+var timer;
 var bacon;
 var broccoli;
+var baconGroup;
+var broccoliGroup;
 var score = 0;
 var scoreText;
-
+var nextBaconSpawn = 0;
+var nextBroccoliSpawn = 0;
+var health =3;
+var takeHealth;
 
 
 function create() {
@@ -21,9 +26,9 @@ function create() {
     //  Game Background
     background = game.add.sprite(0, 0, 'background');
     //  Game Bacon
-    bacon = game.add.sprite(0, 0, 'bacon');
+    bacon = game.add.sprite('bacon');
     //  Game Broccoli
-    broccoli = game.add.sprite(250,25, 'broccoli');
+    broccoli = game.add.sprite('broccoli');
 
     //want ground to be right around 0,465?
 
@@ -33,13 +38,16 @@ function create() {
     baconGroup.enableBody = true;
     baconGroup.physicsBodyType = Phaser.Physics.ARCADE;
     baconGroup.createMultiple(100, 'bacon');
-    baconGroup.setAll('collideWorldBounds', false);
+    baconGroup.setAll('checkWorldBounds', true);
+    baconGroup.setAll('outOfBoundsKill', true);
 
     broccoliGroup = game.add.group();
     broccoliGroup.enableBody = true;
-    broccolliGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    broccoliGroup.physicsBodyType = Phaser.Physics.ARCADE;
     broccoliGroup.createMultiple(100, 'broccoli');
-    broccoliGroup.setAll('collideWorldBounds', false);
+    broccoliGroup.setAll('checkWorldBounds', true);
+    broccoliGroup.setAll('outOfBoundsKill', true);
+
 
     //  enable physics on objects
     game.physics.arcade.enable(character);
@@ -47,13 +55,15 @@ function create() {
     game.physics.arcade.enable(broccoli);
     character.body.collideWorldBounds = true;
 
+    // baconGroup.forEach(function())
+
     // Bacon Fall
 
     bacon.body.gravity.y = 150;
     bacon.body.collideWorldBounds = false;
 
     // Broccoli Fall
-    broccoli.body.gravity.y = 150;
+    broccoli.body.gravity.y = 300;
     broccoli.body.collideWorldBounds = false;
 
     //  walking
@@ -64,6 +74,7 @@ function create() {
 
     //  The score
     scoreText = game.add.text(450, 16, 'Bacon Bits: 0', { fontSize: '32px', fill: '#000' });
+    livesText = game.add.text (450, 45,'Lives:' + health, { fontSize: '32px', fill: '#000' });
 
     //  controls
     cursors = game.input.keyboard.createCursorKeys();
@@ -77,70 +88,105 @@ function create() {
 
 function update() {
 
-    game.physics.arcade.overlap(character, bacon, baconHit, null, this);
-    game.physics.arcade.overlap(character, broccoli, broccoliHit, null, this);
-    background.y = 0;
-    background.x = 0;
+game.physics.arcade.overlap(character, baconGroup, baconHit, null, this);
+game.physics.arcade.overlap(character, broccoliGroup, broccoliHit, null, this);
+background.y = 0;
+background.x = 0;
 
-
-    // Left and right movement
-    character.body.velocity.x = 0;
-
-
-    if (cursors.left.isDown)
-    {
-
-        character.body.velocity.x = -350;
-
-        character.animations.play('left');
-    }
-    else if (cursors.right.isDown)
-    {
-
-        character.body.velocity.x = 350;
-
-        character.animations.play('right');
-    }
-    else
-    {
-
-        character.animations.stop();
-
-        character.frame = 1;
-    }
-    
-
-    //  Upward and downward movement
-    character.body.velocity.y = 0;
-    // character.body.height.y = 0;
-
-    if (cursors.up.isDown && character.y >= 388)
-    {
-
-        character.body.velocity.y = -350;
-
-        character.animations.play('up');
-    }
-    else if (cursors.down.isDown)
-    {
-
-        character.body.velocity.y = 350;
-
-        character.animations.play('down');
-    }
-    else
-    {
-
-        character.animations.stop();
-
-        character.frame = 1;
-    }
+function broccoliFall () {
+  broccoli = broccoliGroup.create((Math.random() * 600), -70, 'broccoli', game.rnd.integerInRange(0, -1));
+  broccoli.body.gravity.y = 300;
+  broccoli.body.collideWorldBounds = false;
+  broccoli.anchor.setTo = (0.5, 0.5);
+  broccoli.checkWorldBounds = true;
+  broccoli.outOfBoundsKill = true;
+  nextBroccoliSpawn = game.time.now + 350;
 }
 
-function baconHit (player, bacon) {
+function baconFall () {
+  bacon = baconGroup.create((Math.random() * 600), -70, 'bacon', game.rnd.integerInRange(0, -1));
+  bacon.body.gravity.y = 100;
+  bacon.body.collideWorldBounds = false;
+  bacon.anchor.setTo = (0.5, 0.5);
+  bacon.checkWorldBounds = true;
+  baconoutOfBoundsKill = true;
+  nextBaconSpawn = game.time.now + 400;
+}
+
+if (game.time.now > nextBaconSpawn) {
+    baconFall();
+}
+
+if (game.time.now > nextBroccoliSpawn) {
+    broccoliFall();
+}
+
+function getRandomArbitrary (min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 
-    bacon.kill();
+// Left and right movement
+character.body.velocity.x = 0;
+
+
+if (cursors.left.isDown)
+{
+
+    character.body.velocity.x = -550;
+
+    character.animations.play('left');
+}
+else if (cursors.right.isDown)
+{
+
+    character.body.velocity.x = 550;
+
+    character.animations.play('right');
+}
+else
+{
+
+    character.animations.stop();
+
+    character.frame = 1;
+}
+
+
+//  Upward and downward movement
+
+
+character.body.velocity.y = 0;
+
+
+// character.body.height.y = 0;
+
+if (cursors.up.isDown && character.y >= 388)
+{
+
+    character.body.velocity.y = -550;
+
+    character.animations.play('up');
+}
+else if (cursors.down.isDown)
+{
+
+    character.body.velocity.y = 550;
+
+    character.animations.play('down');
+}
+else
+{
+
+    character.animations.stop();
+
+    character.frame = 1;
+}
+}
+
+function baconHit (player, baconGroup) {
+
+    baconGroup.kill();
     gulpSound = game.add.audio('gulpsound');
     gulpSound.volume = 0.5;
     gulpSound.loop = false;
@@ -148,21 +194,22 @@ function baconHit (player, bacon) {
 
 
     score += 100;
-    scoreText.text = 'Score: ' + score;
+    scoreText.text = 'Bacon Bits: ' + score;
 
 }
 
-function broccoliHit (player, broccoli) {
-    broccoli.kill();
+function broccoliHit (player, broccoliGroup) {
+    broccoliGroup.kill();
     awMan = game.add.audio('awman');
     awMan.volume = 0.5;
     awMan.loop = false;
     awMan.play('');
-    var health = 1;
     health -= 1;
+    livesText.text = 'Lives: ' + health;
     if (health <=0 )
     {
     alert('Death by Fiber. Gnarley, brah.');
+    location.reload();
     }
 }
 
