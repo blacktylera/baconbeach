@@ -9,13 +9,17 @@ var bacon;
 var broccoli;
 var baconGroup;
 var broccoliGroup;
+var fallingPigGroup;
 var score = 0;
 var scoreText;
 var nextBaconSpawn = 0;
 var nextBroccoliSpawn = 0;
+var nextFallingPigSpawn = 0;
 var health =3;
 var takeHealth;
 var timeIncrement;
+var fallingPig;
+var flyingPig;
 
 
 function create() {
@@ -30,6 +34,8 @@ function create() {
     bacon = game.add.sprite('bacon');
     //  Game Broccoli
     broccoli = game.add.sprite('broccoli');
+
+    fallingPig = game.add.sprite('fallingPig');
 
     //want ground to be right around 0,465?
 
@@ -49,12 +55,20 @@ function create() {
     broccoliGroup.setAll('checkWorldBounds', true);
     broccoliGroup.setAll('outOfBoundsKill', true);
 
+    fallingPigGroup = game.add.group();
+    fallingPigGroup.enableBody = true;
+    fallingPigGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    fallingPigGroup.createMultiple(1000, 'fallingPig');
+    fallingPigGroup.setAll('checkWorldBounds', true);
+    fallingPigGroup.setAll('outOfBoundsKill', true);
+
 
     //  enable physics on objects
     game.physics.arcade.enable(character);
     character.body.setSize(25, 25, 25, 25);
     game.physics.arcade.enable(bacon);
     game.physics.arcade.enable(broccoli);
+    game.physics.arcade.enable(fallingPig);
     character.body.collideWorldBounds = true;
 
     // baconGroup.forEach(function())
@@ -67,6 +81,9 @@ function create() {
     // Broccoli Fall
     broccoli.body.gravity.y = 300;
     broccoli.body.collideWorldBounds = false;
+
+    // fallingPig.body.gravity.y = 600;
+    // fallingPig.body.collideWorldBounds = false;
 
     //  walking
     character.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -92,6 +109,8 @@ function update() {
 
 game.physics.arcade.overlap(character, baconGroup, baconHit, null, this);
 game.physics.arcade.overlap(character, broccoliGroup, broccoliHit, null, this);
+game.physics.arcade.overlap(character, fallingPigGroup, fallingPigHit, null, this);
+
 background.y = 0;
 background.x = 0;
 
@@ -141,12 +160,26 @@ function baconFall () {
   nextBaconSpawn = game.time.now + 400;
 }
 
+
+function fallingPigFall () {
+  fallingPig = fallingPigGroup.create((Math.random() * 600), -150, 'fallingPig', game.rnd.integerInRange(0, -1));
+  fallingPig.body.gravity.y = 1000;
+  fallingPig.body.collideWorldBounds = false;
+  fallingPig.anchor.setTo = (0.5, 0.5);
+  fallingPig.checkWorldBounds = true;
+  fallingPig.outOfBoundsKill = true;
+  nextFallingPigSpawn = game.time.now + 50000;
+}
 if (game.time.now > nextBaconSpawn) {
     baconFall();
 }
 
 if (game.time.now > nextBroccoliSpawn) {
     broccoliFall();
+}
+
+if (game.time.now > nextFallingPigSpawn && score >= 500) {
+    fallingPigFall();
 }
 
 
@@ -224,6 +257,21 @@ function baconHit (player, baconGroup) {
 
 
     score += 100;
+    scoreText.text = 'Bacon Bits: ' + score;
+
+}
+
+
+function fallingPigHit (player, fallingPigGroup) {
+
+    fallingPigGroup.kill();
+    gulpSound = game.add.audio('gulpsound');
+    gulpSound.volume = 0.5;
+    gulpSound.loop = false;
+    gulpSound.play('');
+
+
+    score += 500;
     scoreText.text = 'Bacon Bits: ' + score;
 
 }

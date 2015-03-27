@@ -6,6 +6,7 @@ var beachTheme;
   game.state.start('menu');
 
   function preload(){
+    game.load.image('fallingPig', 'scripts/pigsprite.png');
     game.load.image('bacon', 'scripts/bacon.png');
     game.load.image('broccoli', 'scripts/broccoli.png');
     game.load.image('background', 'scripts/backgroundstatic.png');
