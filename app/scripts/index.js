@@ -15,6 +15,7 @@ var nextBaconSpawn = 0;
 var nextBroccoliSpawn = 0;
 var health =3;
 var takeHealth;
+var timeIncrement;
 
 
 function create() {
@@ -37,14 +38,14 @@ function create() {
     baconGroup = game.add.group();
     baconGroup.enableBody = true;
     baconGroup.physicsBodyType = Phaser.Physics.ARCADE;
-    baconGroup.createMultiple(100, 'bacon');
+    baconGroup.createMultiple(1000, 'bacon');
     baconGroup.setAll('checkWorldBounds', true);
     baconGroup.setAll('outOfBoundsKill', true);
 
     broccoliGroup = game.add.group();
     broccoliGroup.enableBody = true;
     broccoliGroup.physicsBodyType = Phaser.Physics.ARCADE;
-    broccoliGroup.createMultiple(100, 'broccoli');
+    broccoliGroup.createMultiple(1000, 'broccoli');
     broccoliGroup.setAll('checkWorldBounds', true);
     broccoliGroup.setAll('outOfBoundsKill', true);
 
@@ -101,7 +102,33 @@ function broccoliFall () {
   broccoli.anchor.setTo = (0.5, 0.5);
   broccoli.checkWorldBounds = true;
   broccoli.outOfBoundsKill = true;
-  nextBroccoliSpawn = game.time.now + 350;
+  if (score >= 0) {
+    timeIncrement = 250;
+  }
+  if (score >= 5000) {
+    timeIncrement = 225;
+  }
+  if (score >= 10000) {
+    timeIncrement = 200;
+  }
+  if (score >= 10000) {
+    timeIncrement = 175;
+  }
+  if (score >= 15000) {
+    timeIncrement = 150;
+  }
+  if (score >= 20000) {
+    timeIncrement = 125;
+  }
+  if (score >= 25000) {
+    timeIncrement = 100;
+  }
+  if (score >= 30000) {
+    timeIncrement = 75;
+  }
+  nextBroccoliSpawn = game.time.now + timeIncrement;
+  console.log(score);
+  console.log(timeIncrement);
 }
 
 function baconFall () {
@@ -110,7 +137,7 @@ function baconFall () {
   bacon.body.collideWorldBounds = false;
   bacon.anchor.setTo = (0.5, 0.5);
   bacon.checkWorldBounds = true;
-  baconoutOfBoundsKill = true;
+  bacon.outOfBoundsKill = true;
   nextBaconSpawn = game.time.now + 400;
 }
 
@@ -121,6 +148,8 @@ if (game.time.now > nextBaconSpawn) {
 if (game.time.now > nextBroccoliSpawn) {
     broccoliFall();
 }
+
+
 
 function getRandomArbitrary (min, max) {
     return Math.random() * (max - min) + min;
