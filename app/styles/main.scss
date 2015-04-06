@@ -1,9 +1,11 @@
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
 
-h1 {
-	text-align: center;
+#gameDiv {
+	margin-left: 2%;
+	margin-right: auto;
+	margin-top: 4%;
 }
 
-.col-md-2 {
-	background-color: red;
+body {
+	background-color: #FAF0E6;
 }

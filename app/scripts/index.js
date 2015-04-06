@@ -7,19 +7,23 @@ var cursors;
 var timer;
 var bacon;
 var broccoli;
+var heart;
 var baconGroup;
 var broccoliGroup;
 var fallingPigGroup;
+var heartGroup;
 var score = 0;
 var scoreText;
 var nextBaconSpawn = 0;
 var nextBroccoliSpawn = 0;
 var nextFallingPigSpawn = 0;
-var health =3;
+var nextHeartSpawn = 0;
+var health = 3;
 var takeHealth;
 var timeIncrement;
 var fallingPig;
 var flyingPig;
+var heartSprite;
 
 
 function create() {
@@ -36,6 +40,8 @@ function create() {
     broccoli = game.add.sprite('broccoli');
 
     fallingPig = game.add.sprite('fallingPig');
+
+    heart = game.add.sprite('heartSprite');
 
     //want ground to be right around 0,465?
 
@@ -62,6 +68,13 @@ function create() {
     fallingPigGroup.setAll('checkWorldBounds', true);
     fallingPigGroup.setAll('outOfBoundsKill', true);
 
+    heartGroup = game.add.group();
+    heartGroup.enableBody = true;
+    heartGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    heartGroup.createMultiple(1000, 'heartSprite');
+    heartGroup.setAll('checkWorldBounds', true);
+    heartGroup.setAll('outOfBoundsKill', true);
+
 
     //  enable physics on objects
     game.physics.arcade.enable(character);
@@ -69,18 +82,19 @@ function create() {
     game.physics.arcade.enable(bacon);
     game.physics.arcade.enable(broccoli);
     game.physics.arcade.enable(fallingPig);
+    game.physics.arcade.enable(heart);
     character.body.collideWorldBounds = true;
 
     // baconGroup.forEach(function())
 
     // Bacon Fall
 
-    bacon.body.gravity.y = 150;
-    bacon.body.collideWorldBounds = false;
+    // bacon.body.gravity.y = 150;
+    // bacon.body.collideWorldBounds = false;
 
-    // Broccoli Fall
-    broccoli.body.gravity.y = 300;
-    broccoli.body.collideWorldBounds = false;
+    // // Broccoli Fall
+    // broccoli.body.gravity.y = 300;
+    // broccoli.body.collideWorldBounds = false;
 
     // fallingPig.body.gravity.y = 600;
     // fallingPig.body.collideWorldBounds = false;
@@ -110,6 +124,7 @@ function update() {
 game.physics.arcade.overlap(character, baconGroup, baconHit, null, this);
 game.physics.arcade.overlap(character, broccoliGroup, broccoliHit, null, this);
 game.physics.arcade.overlap(character, fallingPigGroup, fallingPigHit, null, this);
+game.physics.arcade.overlap(character, heartGroup, heartHit, null, this);
 
 background.y = 0;
 background.x = 0;
@@ -170,6 +185,19 @@ function fallingPigFall () {
   fallingPig.outOfBoundsKill = true;
   nextFallingPigSpawn = game.time.now + 50000;
 }
+
+
+function heartFall () {
+  heart = heartGroup.create((Math.random() * 600), -70, 'heartSprite', game.rnd.integerInRange(0, -1));
+  heart.body.gravity.y = 750;
+  heart.body.collideWorldBounds = false;
+  heart.anchor.setTo = (0.5, 0.5);
+  heart.checkWorldBounds = true;
+  heart.outOfBoundsKill = true;
+  nextHeartSpawn = game.time.now + 100000;
+}
+
+
 if (game.time.now > nextBaconSpawn) {
     baconFall();
 }
@@ -180,6 +208,10 @@ if (game.time.now > nextBroccoliSpawn) {
 
 if (game.time.now > nextFallingPigSpawn && score >= 500) {
     fallingPigFall();
+}
+
+if (game.time.now > nextHeartSpawn && score >= 5000) {
+    heartFall();
 }
 
 
@@ -291,5 +323,11 @@ function broccoliHit (player, broccoliGroup) {
     }
 }
 
+
+function heartHit (player, heartGroup) {
+    heartGroup.kill();
+    health += 1;
+    livesText.text = 'Lives: ' + health;
+}
 
 })();
